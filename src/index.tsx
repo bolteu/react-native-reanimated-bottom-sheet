@@ -101,6 +101,7 @@ type State = {
   heightOfContent: Animated.Value<number>
   heightOfHeader: number
   heightOfHeaderAnimated: Animated.Value<number>
+  highestSnapPoint: number
 }
 
 const { height: screenHeight } = Dimensions.get('window')
@@ -596,6 +597,15 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     this.isManuallySetValue.setValue(1)
   }
 
+  snapToPosition = (distanceFromBottom: number) => {
+    const position = sub(this.state.highestSnapPoint, distanceFromBottom)
+    this.manuallySetValue.setValue(
+      // @ts-ignore
+      position
+    )
+    this.isManuallySetValue.setValue(1)
+  }
+
   private height: Animated.Value<number> = new Value(0)
 
   private handleLayoutHeader = ({
@@ -623,6 +633,15 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   static renumber = (str: string) =>
     (Number(str.split('%')[0]) * screenHeight) / 100
 
+  static getNumber = (value: number | string): number => {
+    if (typeof value === 'number') {
+      return value
+    } else if (typeof value === 'string') {
+      return BottomSheetBehavior.renumber(value)
+    }
+    throw new Error(`Invalid type for value ${value}: ${typeof value}`)
+  }
+
   static getDerivedStateFromProps(
     props: Props,
     state: State | undefined
@@ -640,13 +659,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
           val: number
           ind: number
         } => {
-          if (typeof s === 'number') {
-            return { val: s, ind: i }
-          } else if (typeof s === 'string') {
-            return { val: BottomSheetBehavior.renumber(s), ind: i }
-          }
-
-          throw new Error(`Invalid type for value ${s}: ${typeof s}`)
+          return { val: BottomSheetBehavior.getNumber(s), ind: i }
         }
       )
       .sort(({ val: a }, { val: b }) => b - a)
@@ -677,6 +690,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       initSnap: sortedPropsSnapPints[0].val,
       snapPoints,
       heightOfHeader: (state && state.heightOfHeader) || 0,
+      highestSnapPoint: sortedPropsSnapPints[0].val,
     }
   }
 

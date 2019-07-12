@@ -5,6 +5,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
+  TouchableOpacity,
 } from 'react-native'
 import BottomSheet from 'reanimated-bottom-sheet'
 
@@ -39,18 +40,33 @@ export default class Example extends React.Component {
   bs = React.createRef()
 
   render() {
+    const bottomSheetTopPosition = 500
     return (
       <View style={styles.container}>
         <BottomSheet
           ref={this.bs}
-          snapPoints={[500, 250, 0]}
+          snapPoints={[bottomSheetTopPosition, 250]}
           renderContent={this.renderInner}
           renderHeader={this.renderHeader}
           initialSnap={1}
         />
-        <TouchableWithoutFeedback onPress={() => this.bs.current.snapTo(0)}>
+        <TouchableWithoutFeedback
+          onPress={() => this.bs.current.snapToPosition(0)}
+        >
           <Image style={styles.map} source={require('./assets/map-bg.jpg')} />
         </TouchableWithoutFeedback>
+        <View style={styles.fabButtonPosition}>
+          <TouchableOpacity
+            style={styles.fabButton}
+            activeOpacity={0.8}
+            onPress={() => {
+              this.bs.current.snapToPosition(bottomSheetTopPosition)
+              // this.bs.current.snapTo(0)
+            }}
+          >
+            <View />
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }
@@ -126,5 +142,18 @@ const styles = StyleSheet.create({
   map: {
     height: '100%',
     width: '100%',
+  },
+  fabButton: {
+    width: 56,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 28,
+    backgroundColor: '#318bfb',
+  },
+  fabButtonPosition: {
+    position: 'absolute',
+    right: 24,
+    bottom: 24,
   },
 })
