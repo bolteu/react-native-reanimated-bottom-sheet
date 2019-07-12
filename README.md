@@ -85,6 +85,16 @@ Imperative method on for snapping to snap point in given index. E.g.
 this.bottomSheetRef.current.snapTo(0)
 ```
 
+### `snapToPosition(distanceFromBottom)`
+
+Method for snapping to any point between highest point and zero.
+Allows to hide bottom sheet imperatively.
+
+```javascript
+// Snap to position 100dp from bottom.
+this.bottomSheetRef.current.snapToPosition(100)
+```
+
 Here `this.bottomSheetRef` refers [to the `ref`](https://reactjs.org/docs/react-api.html#reactcreateref) passed to the `BottomSheet` component.
 
 ## Example
