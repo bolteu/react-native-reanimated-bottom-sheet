@@ -8,14 +8,11 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native'
-import { BlurView } from 'expo'
-import { Ionicons } from '@expo/vector-icons'
 import BottomSheet from 'reanimated-bottom-sheet'
 import Animated from 'react-native-reanimated'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 const AnimatedView = Animated.View
-const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
 
 const songCoverSizes = [50, Dimensions.get('window').width - 60]
 const songCoverTopPositions = [
@@ -174,9 +171,7 @@ const AppleMusic = () => {
           >
             {renderHandler()}
           </AnimatedView>
-          <AnimatedBlurView
-            intensity={100}
-            tint={'default'}
+          <AnimatedView
             style={[
               styles.headerContentContainer,
               {
@@ -186,13 +181,9 @@ const AppleMusic = () => {
           >
             <View style={styles.headerTopBorder} />
             <Text style={styles.songTitleSmall}>{song.name}</Text>
-            <TouchableOpacity style={styles.headerActionButton}>
-              <Ionicons name="ios-play" size={32} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.headerActionButton}>
-              <Ionicons name="ios-fastforward" size={32} />
-            </TouchableOpacity>
-          </AnimatedBlurView>
+            <TouchableOpacity style={styles.headerActionButton} />
+            <TouchableOpacity style={styles.headerActionButton} />
+          </AnimatedView>
         </AnimatedView>
       </TouchableWithoutFeedback>,
       renderSongCover(),
